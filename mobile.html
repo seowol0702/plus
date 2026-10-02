@@ -247,6 +247,34 @@ if (META_PIXEL_ID) {
   fbq('init', META_PIXEL_ID); fbq('track', 'PageView');
 }
 </script>
+<!-- [서월 광고] 네이버 검색광고 전환추적: NAVER_WA_ID 에 '공통 인증키'를 넣으면 활성화, 비워두면 동작 안 함 -->
+<script>
+var NAVER_WA_ID = '';
+if (NAVER_WA_ID) { (function(){ var s=document.createElement('script'); s.src='//wcs.naver.net/wcslog.js'; s.async=true;
+  s.onload=function(){ if(!window.wcs_add) window.wcs_add={}; wcs_add['wa']=NAVER_WA_ID; window._nasa=window._nasa||{}; if(window.wcs){ wcs.inflow(); wcs_do(_nasa); } };
+  document.head.appendChild(s); })(); }
+function naverLeadConversion(){ try{ if(NAVER_WA_ID && window.wcs){ var _n={}; _n['cnv']=wcs.cnv('4','1'); wcs_do(_n); } }catch(e){} }
+</script>
+<!-- [서월 광고] 당근 전환추적(karrotPixel): KARROT_PIXEL_ID 비우면 동작 안 함 -->
+<script>
+var KARROT_PIXEL_ID = '1790922228060749001';
+if (KARROT_PIXEL_ID) {
+  (function (w, d) {
+    if (w.karrotPixel) return;
+    var k = { stub: true, queue: [] };
+    k.init = function () { k.queue.push(['init', arguments, Date.now()]); };
+    k.track = function () { k.queue.push(['track', arguments, Date.now()]); };
+    w.karrotPixel = k;
+    var s = d.createElement('script'); s.async = true;
+    s.src = 'https://karrot-pixel.business.daangn.com/karrot-pixel.js';
+    var f = d.getElementsByTagName('script')[0];
+    f && f.parentNode ? f.parentNode.insertBefore(s, f) : d.head.appendChild(s);
+  })(window, document);
+  window.karrotPixel.init(KARROT_PIXEL_ID);
+  window.karrotPixel.track('ViewPage');
+}
+function karrotLeadConversion(){ try{ if(KARROT_PIXEL_ID && window.karrotPixel){ karrotPixel.track('SubmitApplication'); karrotPixel.track('Lead'); } }catch(e){} }
+</script>
 </head>
 <body>
 
@@ -493,7 +521,7 @@ if(v.join('')){sessionStorage.setItem('seowol_utm',v.join('/'));}var s=sessionSt
     if(!document.getElementById('agree').checked){alert('개인정보 수집·이용에 동의해 주세요.');return;}
     var comp=(bizType?'['+bizType+'] ':'')+(company||'(미입력)');
     var btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='접수 중...';
-    if(LEAD_WEBHOOK_URL){try{var p=new URLSearchParams();p.append('name',name);p.append('phone',phone);p.append('company',comp);p.append('source',LEAD_SOURCE);if(window.fbq){fbq('track','Lead');}p.append('submittedAt',new Date().toISOString());fetch(LEAD_WEBHOOK_URL,{method:'POST',body:p,mode:'no-cors',keepalive:true});}catch(err){}}
+    if(LEAD_WEBHOOK_URL){try{var p=new URLSearchParams();p.append('name',name);p.append('phone',phone);p.append('company',comp);p.append('source',LEAD_SOURCE);if(window.fbq){fbq('track','Lead');}naverLeadConversion();karrotLeadConversion();p.append('submittedAt',new Date().toISOString());fetch(LEAD_WEBHOOK_URL,{method:'POST',body:p,mode:'no-cors',keepalive:true});}catch(err){}}
     setTimeout(function(){ if(REDIRECT_URL){window.location.href=REDIRECT_URL;} else {document.getElementById('apply').innerHTML='<div class="wrap" style="text-align:center;padding:60px 0"><h2 class="title">신청이 접수되었습니다 ✓</h2><p class="sub">영업일 1일 내 담당자가 <b>02-2138-3732</b> 또는 담당자 번호로 연락드립니다.<br>모르는 번호라도 꼭 받아주세요.</p></div>';window.scrollTo({top:document.getElementById('apply').offsetTop-80,behavior:'smooth'});} },250);
   });
 })();
